@@ -108,6 +108,6 @@ __uninitialized_fill_aux(ForwardIterator first, ForwardIterator last, const T& x
         construct(&*cur, x);
 }
 
-}
+} /* end of namespace stl::memory */
 
 #endif /* STL_IMPL_MEMORY_UTILS_ */

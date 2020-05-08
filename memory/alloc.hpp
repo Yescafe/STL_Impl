@@ -248,6 +248,6 @@ chunk_alloc(size_t size, int& nobjs)
     }
 }
 
-}
+} /* end of namespace stl::memory */
 
 #endif /* STL_IMPL_MEMORY_ALLOC_ */

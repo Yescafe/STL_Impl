@@ -6,6 +6,6 @@
 
 namespace stl {
     using namespace memory;
-}
+} /* end of namespace stl */
 
 #endif /* STL_IMPL_MEMORY */
