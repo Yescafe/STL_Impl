@@ -1,10 +1,13 @@
 #ifndef STL_IMPL_MEMORY_UTILS_
 #define STL_IMPL_MEMORY_UTILS_
 
-namespace stl::memory {
-
 #include <algorithm>
 #include <cstring>
+#include "../__type_traits.hpp"
+using namespace stl::__traits;
+#include "./construct.hpp"
+
+namespace stl::memory {
 
 template<typename ForwardIterator, typename Size, typename T>
 inline ForwardIterator
@@ -47,7 +50,7 @@ inline ForwardIterator
 __uninitialized_copy(InputIterator first, InputIterator last, 
                        ForwardIterator result, T *)
 {
-    typedef typename __type_traits<T1>::is_POD_type is_POD;
+    typedef typename __type_traits<T>::is_POD_type is_POD;
     return __uninitialized_copy_aux(first, last, result, is_POD());
 }
 
@@ -62,6 +65,7 @@ template<typename InputIterator, typename ForwardIterator>
 inline ForwardIterator
 __uninitialized_copy_aux(InputIterator first, InputIterator last, 
                            ForwardIterator result, __false_type) {
+    ForwardIterator cur = result;
     for (; first != last; ++first, ++cur)
         construct(&*cur, *first);
     return cur;
@@ -73,7 +77,7 @@ inline char *uninitialized_copy(const char *first, const char *last, char *resul
     return result + (last - first);
 }
 
-inline char *uninitialized_copy(const wchar_t *first, const wchar_t *last, wchar_t *result)
+inline wchar_t *uninitialized_copy(const wchar_t *first, const wchar_t *last, wchar_t *result)
 {
     memmove(result, first, sizeof(wchar_t) * (last - first));
     return result + (last - first);

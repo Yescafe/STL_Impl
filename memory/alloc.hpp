@@ -248,6 +248,14 @@ chunk_alloc(size_t size, int& nobjs)
     }
 }
 
+
+#ifdef __USE_MALLOC
+typedef malloc_alloc alloc;
+#else
+#define __NODE_ALLOCATOR_THREADS 0
+typedef __default_alloc_template<__NODE_ALLOCATOR_THREADS, 0> alloc;
+#endif
+
 } /* end of namespace stl::memory */
 
 #endif /* STL_IMPL_MEMORY_ALLOC_ */
