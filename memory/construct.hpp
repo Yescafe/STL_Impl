@@ -4,6 +4,7 @@
 #include <new>  // for placement new
 #include "../__type_traits.hpp"
 using namespace stl::__traits;
+#include "../iterator.hpp"
 
 namespace stl::memory {
 
@@ -19,12 +20,6 @@ inline void destroy(T *pointer) {
 
 namespace hidden {
 
-template<typename ForwardIterator, typename T>
-inline void __destroy(ForwardIterator first, ForwardIterator last) {
-    typedef typename __type_traits<T>::has_trivial_destructor trivial_destructor;
-    __destroy_aux(first, last, trivial_destructor());
-}
-
 template<typename ForwardIterator>
 inline void
 __destroy_aux(ForwardIterator first, ForwardIterator last, __false_type) {
@@ -35,6 +30,12 @@ __destroy_aux(ForwardIterator first, ForwardIterator last, __false_type) {
 template<typename ForwardIterator>
 inline void
 __destroy_aux(ForwardIterator first, ForwardIterator last, __true_type) {}
+
+template<typename ForwardIterator, typename T>
+inline void __destroy(ForwardIterator first, ForwardIterator last, T*) {
+    typedef typename __type_traits<T>::has_trivial_destructor trivial_destructor;
+    __destroy_aux(first, last, trivial_destructor());
+}
 
 } /* end of namespace hidden */
 

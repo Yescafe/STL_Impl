@@ -1,8 +1,6 @@
 #ifndef STL_IMPL_MEMORY_ALLOC_
 #define STL_IMPL_MEMORY_ALLOC_
 
-namespace stl::memory {
-
 #if 0
 #   include <new>
 #   define __THROW_BAD_ALLOC throw bad_alloc
@@ -13,6 +11,8 @@ namespace stl::memory {
 
 #include "./utils.hpp"
 #include <malloc.h>
+
+namespace stl::memory {
 
 template<int inst>
 class __malloc_alloc_template {
@@ -79,7 +79,7 @@ void *__malloc_alloc_template<inst>::oom_realloc(void *p, size_t n)
         my_malloc_handler = __malloc_alloc_oom_handler;
         if (0 == my_malloc_handler) { __THROW_BAD_ALLOC; }
         (*my_malloc_handler)();
-        result = realloc(n);
+        result = realloc(p, n);
         if (result) return result;
     }
 }
@@ -152,7 +152,7 @@ public:
         *my_free_list = q;
     }
 
-    staic void *reallocate(void *p, size_t old_sz, size_t new_sz);
+    static void *reallocate(void *p, size_t old_sz, size_t new_sz);
 };
 
 template<bool threads, int inst>
@@ -165,7 +165,7 @@ template<bool threads, int inst>
 size_t __default_alloc_template<threads, inst>::heap_size = 0;
 
 template<bool threads, int inst>
-__default_alloc_template<threads, inst>::obj * volatile
+typename __default_alloc_template<threads, inst>::obj * volatile
 __default_alloc_template<threads, inst>::free_list[__NFREELISTS] = 
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, };
 
@@ -255,6 +255,24 @@ typedef malloc_alloc alloc;
 #define __NODE_ALLOCATOR_THREADS 0
 typedef __default_alloc_template<__NODE_ALLOCATOR_THREADS, 0> alloc;
 #endif
+
+template<typename T, class Alloc>
+class simple_alloc {
+public:
+    static T *allocate(std::size_t n) {
+        return 0 == n ? 0 : (T*) Alloc::allocate(n * sizeof(T));
+    }
+    static T *alloate() {
+        return (T*) Alloc::allocate(sizeof(T));
+    }
+    static void deallocate(T *p, std::size_t n) {
+        if (0 != n)
+            Alloc::deallocate(p, n * sizeof(T));
+    }
+    static void deallocate(T *p) {
+        Alloc::deallocate(p, sizeof(T));
+    }
+};
 
 } /* end of namespace stl::memory */
 

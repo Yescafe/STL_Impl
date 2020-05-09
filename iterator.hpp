@@ -1,9 +1,9 @@
 #ifndef STL_IMPL_ITERATOR_
 #define STL_IMPL_ITERATOR_
 
-namespace stl {
-
 #include <cstddef>
+
+namespace stl {
 
 struct input_iterator_tag {};
 struct output_iterator_tag {};
