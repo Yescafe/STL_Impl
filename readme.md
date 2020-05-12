@@ -14,5 +14,6 @@ Default is `-std=c++20`, minimum is `-std=c++17`.
 - [ ] vector.hpp
   - [x] tests/vector.cpp
 - [ ] list.hpp
+  - [x] tests/list.cpp
 - [ ] experiment libs (optional)
   - [ ] experiment/concept/concept.hpp (C++20)
