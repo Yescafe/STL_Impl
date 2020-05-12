@@ -3,7 +3,7 @@
 
 #include "./iterator.hpp"
 #include "memory/alloc.hpp"
-
+#include <iterator>
 namespace stl {
 
 template<typename T>
@@ -56,6 +56,23 @@ struct __list_iterator {
         --*this;
         return tmp;
     }
+
+    self operator+(int idx) {
+        if (idx == 0) return *this;
+        auto result = *this;
+        while (idx < 0) {
+            ++idx;
+            result.node = (link_type)(result.node->prev);
+        }
+        while (idx > 0) {
+            --idx;
+            result.node = (link_type)(result.node->next);
+        }
+        return result;
+    }
+    self operator-(int idx) {
+        return operator+(-idx);
+    }
 };
 
 using namespace memory;
@@ -90,13 +107,11 @@ protected:
     }
 
 public:
-    iterator begin() { return (link_type)(node->next); }
-    iterator end()   { return node; }
+    iterator begin() const { return (link_type)(node->next); }
+    iterator end() const   { return node; }
     bool empty() const { return node->next == node; }
     size_type size() const {
-        size_type result = 0;
-        distance(begin(), end(), result);
-        return result;
+        return distance(begin(), end());
     }
     reference front() { return *begin(); }
     reference back()  { return *(--end()); }
@@ -122,6 +137,11 @@ public:
         position.node->prev = tmp;
         return tmp;
     }
+    void insert(iterator position, size_type n, const T& x) {
+        while (n--) {
+            insert(position, x);
+        }
+    }
 
     iterator erase(iterator position) {
         link_type next_node = link_type(position.node->next);
@@ -142,13 +162,54 @@ public:
 protected:
     void transfer(iterator position, iterator first, iterator last) {
         if (position != last) {
-            (link_type)(last->node.prev->next = position.node;
-            (link_type)(first->node.prev->next = last.node;
-            (link_type)(position->node.prev->next = first.node;
-            link_type tmp = link_type(position->node.prev);
-            position->node.prev = last->node.prev;
-            last->node.prev = first->node.prev;
-            first->node.prev = tmp;
+            link_type(last.node->prev)->next = position.node;
+            link_type(first.node->prev)->next = last.node;
+            link_type(position.node->prev)->next = first.node;
+            link_type tmp = link_type(position.node->prev);
+            position.node->prev = last.node->prev;
+            last.node->prev = first.node->prev;
+            first.node->prev = tmp;
+        }
+    }
+
+public:
+    void swap(list<T, Alloc>& x) {
+        auto tmp = node;
+        node = x.node;
+        x.node = tmp;
+    }
+
+    void splice(iterator position, list& x) {
+        if (!x.empty())
+            transfer(position, x.begin(), x.end());
+    }
+    void splice(iterator position, list&, iterator i) {
+        iterator j = i;
+        ++j;
+        if (position == i || position == j) return ;
+        transfer(position, i, j);
+    }
+    void splice(iterator position, list&, iterator first, iterator last) {
+        if (first != last) 
+            transfer(position, first, last);
+    }
+
+    void merge(list<T, Alloc>& x);
+    void reverse();
+    void sort() {
+        sort([](const T& a, const T& b) { return a < b; });
+    }
+    template<typename Pred>
+    void sort(Pred pred) {
+        // bubble sort?
+        for (auto i = begin(); i != end(); ++i) {
+            for (auto j = i + 1; j != end(); ++j) {
+                if (!pred(*i, *j)) {
+                    auto tmp = *i;
+                    *i = *j;
+                    *j = tmp;
+                }
+            }
         }
     }
 };
@@ -190,6 +251,40 @@ void list<T, Alloc>::unique() {
         else
             first = next;
         next = first;
+    }
+}
+
+template<typename T, typename Alloc>
+void list<T, Alloc>::merge(list<T, Alloc>& x) {
+    iterator first1 = begin();
+    iterator last1  = end();
+    iterator first2 = x.begin();
+    iterator last2  = x.end();
+
+    while (first1 != last1 && first2 != last2) {
+        if (*first2 < *first1) {
+            iterator next = first2;
+            transfer(first1, first2, ++next);
+            first2 = next;
+        } 
+        else {
+            ++first1;
+        }
+        if (first2 != last2) transfer(last1, first2, last2);
+    }
+}
+
+template<typename T, typename Alloc>
+void list<T, Alloc>::reverse()
+{
+    if (node->next == node || link_type(node->next)->next == node)
+        return ;
+    iterator first = begin();
+    ++first;
+    while (first != end()) {
+        iterator old = first;
+        ++first;
+        transfer(begin(), old, first);
     }
 }
 
