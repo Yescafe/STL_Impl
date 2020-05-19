@@ -5,6 +5,7 @@
 #include <iostream>
 #include "memory/alloc.hpp"
 #include "iterator.hpp"
+#include <algorithm>
 
 namespace stl {
 
@@ -170,6 +171,43 @@ protected:
     map_pointer allocate_node() {
         return data_allocator::allocate(buffer_size());
     }
+    void deallocate_node(value_type *p) {
+        destroy(p);
+        data_allocator::deallocate(p);
+    }
+
+public:
+    void push_back(const value_type& t) {
+        if (finish.cur != finish.last - 1) {
+            construct(finish.cur, t);
+            ++finish.cur;
+        }
+        else
+            push_back_aux(t);
+    }
+    void push_front(const value_type& t) {
+        if (finish.cur != finish.first) {
+            construct(start.cur - 1, t);
+            --start.cur;
+        }
+        else
+            push_front_aux(t);
+    }
+
+protected:
+    void push_back_aux(const value_type&);
+    void push_front_aux(const value_type&);
+
+protected:
+    void reserve_map_at_back(size_type nodes_to_add = 1) {
+        if (nodes_to_add + 1 > map_size - (finish.node - map))
+            reallocate_map(nodes_to_add, false);
+    }
+    void reserve_map_at_front(size_type nodes_to_add = 1) {
+        if (nodes_to_add + 1 > start.node - map)
+            reallocate_map(nodes_to_add, true);
+    }
+    void reallocate_map(size_type nodes_to_add, bool add_at_front);
 };
 
 template<typename T, typename Alloc, std::size_t BufSiz>
@@ -212,6 +250,73 @@ void deque<T, Alloc, BufSiz>::create_map_and_nodes(size_type num_elements)
     finish.cur = finish.first + num_elements % buffer_size();
 }
 
+template<typename T, typename Alloc, std::size_t BufSiz>
+void deque<T, Alloc, BufSiz>::push_back_aux(const value_type& t)
+{
+    value_type t_copy;
+    reserve_map_at_back();
+    *(finish.node + 1) = allocate_node();
+    try {
+        finish.set_node(finish.node + 1);
+        finish.cur = finish.first;
+        construct(finish.cur, t_copy);
+    }
+    catch (...) {
+        finish.set_node(finish.node - 1);
+        finish.cur = finish.last;
+        deallocate_node(*(finish.node + 1);
+        throw;
+    }
+}
+
+template<typename T, typename Alloc, std::size_t BufSiz>
+void deque<T, Alloc, BufSiz>::push_front_aux(const value_type& t)
+{
+    value_type t_copy;
+    reserve_map_at_front();
+    *(start.node - 1) = allocate_node();
+    try {
+        start.set_node(start.node - 1);
+        start.cur = start.last - 1;
+        construct(start.cur, t_copy);
+    }
+    catch (...) {
+        start.set_node(start.node + 1);
+        start.cur = start.first;
+        deallocate_node(*(finish.node + 1));
+        throw;
+    }
+}
+
+template<typename T, typename Alloc, std::size_t BufSiz>
+void deque<T, Alloc, BufSiz>::reallocate_map(size_type nodes_to_add, bool add_at_front)
+{
+    size_type old_num_nodes = finish.node - start.node + 1;
+    size_type new_num_nodes = old_num_nodes + nodes_to_add;
+
+    map_pointer new_nstart;
+    if (map_size > 2 * new_num_nodes) {
+        new_nstart = map + (map_size - new_num_nodes) / 2
+                + (add_at_front ? nodes_to_add : 0);
+        if (new_nstart < start.node)
+            copy(start.node, finish.node + 1, new_nstart);
+        else
+            std::copy_backward(start.node, finish.node + 1, new_nstart + old_num_nodes);
+    }
+    else {
+        size_type new_map_size = map_size + std::max(map_size, nodes_to_add) + 2;
+        map_pointer new_map = map_allocator::allocate(new_map_size);
+        new_nstart = new_map + (new_map_size - new_num_nodes) / 2
+                + (add_at_front ? nodes_to_add : 0);
+        copy(start.node, finish.node + 1, new_nstart);
+        map_allocator::deallocate(map, map_size);
+        map = new_map;
+        map_size = new_map_size;
+    }
+
+    start.set_node(new_nstart);
+    finish.set_node(new_nstart + old_num_nodes - 1);
+}
 
 }
 
