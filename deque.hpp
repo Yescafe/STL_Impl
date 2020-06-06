@@ -208,6 +208,59 @@ protected:
             reallocate_map(nodes_to_add, true);
     }
     void reallocate_map(size_type nodes_to_add, bool add_at_front);
+
+public:
+    void pop_back() {
+        if (finish.cur != finish.first) {
+            --finish.cur;
+            destroy(finish.cur);
+        } else {
+            pop_back_aux();
+        }
+    }
+    void pop_front() {
+        if(start.cur != start.last - 1) {
+            destroy(start.cur);
+            ++start.cur;
+        } else {
+            pop_front_aux();
+        }
+    }
+
+protected:
+    void pop_back_aux();
+    void pop_front_aux();
+
+public:
+    void clear();
+    iterator erase(iterator pos) {
+        iterator next = pos;
+        ++next;
+        difference_type index = pos - start;
+        if (index < (size() >> 1)) {
+            std::copy_backward(start, pos, next);
+            pop_front();
+        } else {
+            copy(next, finish, pos);
+            pop_back();
+        }
+        return start + index;
+    }
+    iterator erase(iterator first, iterator last);
+    iterator insert(iterator position, const value_type& x) {
+        if (position.cur == start.cur) {
+            push_front(x);
+            return start;
+        } else if (position.cur == finish.cur) {
+            push_back(x);
+            iterator tmp = finish;
+            --tmp;
+            return tmp;
+        } else {
+            return insert_aux(position, x);
+        }
+    }
+    iterator insert_aux(iterator pos, const value_type& x);
 };
 
 template<typename T, typename Alloc, std::size_t BufSiz>
@@ -257,14 +310,15 @@ void deque<T, Alloc, BufSiz>::push_back_aux(const value_type& t)
     reserve_map_at_back();
     *(finish.node + 1) = allocate_node();
     try {
+        construct(finish.cur, t_copy);
         finish.set_node(finish.node + 1);
         finish.cur = finish.first;
-        construct(finish.cur, t_copy);
     }
     catch (...) {
+        // commit or rollback
         finish.set_node(finish.node - 1);
         finish.cur = finish.last;
-        deallocate_node(*(finish.node + 1);
+        deallocate_node(*(finish.node + 1));
         throw;
     }
 }
@@ -283,7 +337,7 @@ void deque<T, Alloc, BufSiz>::push_front_aux(const value_type& t)
     catch (...) {
         start.set_node(start.node + 1);
         start.cur = start.first;
-        deallocate_node(*(finish.node + 1));
+        deallocate_node(*(finish.node - 1));
         throw;
     }
 }
@@ -316,6 +370,100 @@ void deque<T, Alloc, BufSiz>::reallocate_map(size_type nodes_to_add, bool add_at
 
     start.set_node(new_nstart);
     finish.set_node(new_nstart + old_num_nodes - 1);
+}
+
+template<typename T, typename Alloc, std::size_t BufSiz>
+void deque<T, Alloc, BufSiz>::pop_back_aux()
+{
+    deallocate_node(finish.first);
+    finish.set_node(finish.node - 1);
+    finish.cur = finish.last - 1;
+    destroy(finish.cur);
+}
+
+template<typename T, typename Alloc, std::size_t BufSiz>
+void deque<T, Alloc, BufSiz>::pop_front_aux()
+{
+    destory(start.cur);
+    deallocate_node(start.first);
+    start.set_node(start.node + 1);
+    start.cur = start.first;
+}
+
+template<typename T, typename Alloc, std::size_t BufSiz>
+void deque<T, Alloc, BufSiz>::clear()
+{
+    for (auto node = start.node + 1; node < finish.node; ++node) {
+        destroy(*node, *node + buffer_size());
+        data_allocator::deallocate(*node, buffer_size());
+    }
+    if (start.node != finish.node) {
+        destroy(start.cur, start.last);
+        destory(finish.first, finish.cur);
+        data_allocator::deallocate(finish.first, buffer_size());
+    } else {
+        destroy(start.cur, finish.cur);
+    }
+    finish = start;
+}
+
+template<typename T, typename Alloc, std::size_t BufSiz>
+typename deque<T, Alloc, BufSiz>::iterator 
+deque<T, Alloc, BufSiz>::erase(iterator first, iterator last)
+{
+    if (first == start && last == finish) {
+        clear();
+        return finish;
+    } else {
+        difference_type n = last - first;
+        difference_type elems_before = first - start;
+        if (elems_before < (size() - n) / 2) {
+            std::copy_backward(start, first, last);
+            iterator new_start = start + n;
+            destroy(start, new_start);
+            for (auto cur = start.node; cur < new_start.node(); ++cur)
+                data_allocator::deallocate(*cur, buffer_size());
+            start = new_start;
+        } else {
+            copy(last, finish, first);
+            iterator new_finish = finish - n;
+            destroy(new_finish, finish);
+            for (auto cur = new_finish.node + 1; cur <= finish.node; ++cur)
+                data_allocator::deallocate(*cur, buffer_size());
+            finish = new_finish;
+        }
+        return start + elems_before;
+    }
+}
+
+
+template<typename T, typename Alloc, std::size_t BufSiz>
+typename deque<T, Alloc, BufSiz>::iterator 
+deque<T, Alloc, BufSiz>::insert_aux(iterator pos, const value_type& x)
+{
+    difference_type index = pos - start;
+    value_type x_copy {x};
+    if (index < size() / 2) {
+        push_front(front());
+        iterator front1 = start;
+        ++front1;
+        iterator front2 = front1;
+        ++front2;
+        pos = start + index;
+        iterator pos1 = pos;
+        ++pos1;
+        copy(front2, pos1, front1);
+    } else {
+        push_back(back());
+        iterator back1 = finish;
+        --back1;
+        iterator back2 = back1;
+        --back2;
+        pos = start + index;
+        std::copy_backward(pos, back2, back1);
+    }
+    *pos = x_copy;
+    return pos;
 }
 
 }
