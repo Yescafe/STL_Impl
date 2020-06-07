@@ -2,7 +2,6 @@
 #define STL_IMPL_DEQUE_
 
 #include <cstddef>
-#include <iostream>
 #include "memory/alloc.hpp"
 #include "iterator.hpp"
 #include <algorithm>
@@ -155,25 +154,27 @@ protected:
     typedef simple_alloc<value_type, Alloc> data_allocator;
     typedef simple_alloc<pointer, Alloc> map_allocator;
 
-    deque(int n, const value_type& value)
-     : start(), finish(), map(0), map_size(0)
-    {
-        fill_initialize(n, value);
-    }
     void fill_initialize(size_type n, const value_type& value);
     void create_map_and_nodes(size_type num_elements);
     size_type buffer_size() {
         return __deque_buf_size(BufSiz, sizeof(value_type));
     }
     size_type initial_map_size() {
-        return size_type(8);
+        return size_type{8};
     }
-    map_pointer allocate_node() {
+    pointer allocate_node() {
         return data_allocator::allocate(buffer_size());
     }
     void deallocate_node(value_type *p) {
         destroy(p);
         data_allocator::deallocate(p);
+    }
+
+public:
+    deque(int n, const value_type& value)
+     : start(), finish(), map(0), map_size(0)
+    {
+        fill_initialize(n, value);
     }
 
 public:
@@ -186,7 +187,7 @@ public:
             push_back_aux(t);
     }
     void push_front(const value_type& t) {
-        if (finish.cur != finish.first) {
+        if (start.cur != start.first) {
             construct(start.cur - 1, t);
             --start.cur;
         }
@@ -241,7 +242,7 @@ public:
             std::copy_backward(start, pos, next);
             pop_front();
         } else {
-            copy(next, finish, pos);
+            std::copy(next, finish, pos);
             pop_back();
         }
         return start + index;
@@ -269,8 +270,9 @@ void deque<T, Alloc, BufSiz>::fill_initialize(size_type n, const value_type& val
     create_map_and_nodes(n);
     map_pointer cur;
     try {
-        for (cur = start.node; cur < finish.node; ++cur)
+        for (cur = start.node; cur < finish.node; ++cur) {
             uninitialized_fill(*cur, *cur + buffer_size(), value);
+        }
         uninitialized_fill(finish.first, finish.cur, value);
     } catch (...) {
         throw;
@@ -280,7 +282,7 @@ void deque<T, Alloc, BufSiz>::fill_initialize(size_type n, const value_type& val
 template<typename T, typename Alloc, std::size_t BufSiz>
 void deque<T, Alloc, BufSiz>::create_map_and_nodes(size_type num_elements)
 {
-    size_type num_nodes = num_elements;
+    size_type num_nodes = num_elements / buffer_size() + 1;
 
     map_size = std::max(initial_map_size(), num_nodes + 2);
     map = map_allocator::allocate(map_size);
@@ -326,7 +328,7 @@ void deque<T, Alloc, BufSiz>::push_back_aux(const value_type& t)
 template<typename T, typename Alloc, std::size_t BufSiz>
 void deque<T, Alloc, BufSiz>::push_front_aux(const value_type& t)
 {
-    value_type t_copy;
+    value_type t_copy {t};
     reserve_map_at_front();
     *(start.node - 1) = allocate_node();
     try {
@@ -353,7 +355,7 @@ void deque<T, Alloc, BufSiz>::reallocate_map(size_type nodes_to_add, bool add_at
         new_nstart = map + (map_size - new_num_nodes) / 2
                 + (add_at_front ? nodes_to_add : 0);
         if (new_nstart < start.node)
-            copy(start.node, finish.node + 1, new_nstart);
+            std::copy(start.node, finish.node + 1, new_nstart);
         else
             std::copy_backward(start.node, finish.node + 1, new_nstart + old_num_nodes);
     }
@@ -362,7 +364,7 @@ void deque<T, Alloc, BufSiz>::reallocate_map(size_type nodes_to_add, bool add_at
         map_pointer new_map = map_allocator::allocate(new_map_size);
         new_nstart = new_map + (new_map_size - new_num_nodes) / 2
                 + (add_at_front ? nodes_to_add : 0);
-        copy(start.node, finish.node + 1, new_nstart);
+        std::copy(start.node, finish.node + 1, new_nstart);
         map_allocator::deallocate(map, map_size);
         map = new_map;
         map_size = new_map_size;
@@ -384,7 +386,7 @@ void deque<T, Alloc, BufSiz>::pop_back_aux()
 template<typename T, typename Alloc, std::size_t BufSiz>
 void deque<T, Alloc, BufSiz>::pop_front_aux()
 {
-    destory(start.cur);
+    destroy(start.cur);
     deallocate_node(start.first);
     start.set_node(start.node + 1);
     start.cur = start.first;
@@ -399,7 +401,7 @@ void deque<T, Alloc, BufSiz>::clear()
     }
     if (start.node != finish.node) {
         destroy(start.cur, start.last);
-        destory(finish.first, finish.cur);
+        destroy(finish.first, finish.cur);
         data_allocator::deallocate(finish.first, buffer_size());
     } else {
         destroy(start.cur, finish.cur);
@@ -421,11 +423,11 @@ deque<T, Alloc, BufSiz>::erase(iterator first, iterator last)
             std::copy_backward(start, first, last);
             iterator new_start = start + n;
             destroy(start, new_start);
-            for (auto cur = start.node; cur < new_start.node(); ++cur)
+            for (auto cur = start.node; cur < new_start.node; ++cur)
                 data_allocator::deallocate(*cur, buffer_size());
             start = new_start;
         } else {
-            copy(last, finish, first);
+            std::copy(last, finish, first);
             iterator new_finish = finish - n;
             destroy(new_finish, finish);
             for (auto cur = new_finish.node + 1; cur <= finish.node; ++cur)
@@ -452,7 +454,7 @@ deque<T, Alloc, BufSiz>::insert_aux(iterator pos, const value_type& x)
         pos = start + index;
         iterator pos1 = pos;
         ++pos1;
-        copy(front2, pos1, front1);
+        std::copy(front2, pos1, front1);
     } else {
         push_back(back());
         iterator back1 = finish;
