@@ -108,7 +108,7 @@ __uninitialized_fill(ForwardIterator first, ForwardIterator last, const T& x, T1
 template<typename ForwardIterator, typename T>
 inline void
 uninitialized_fill(ForwardIterator first, ForwardIterator last, const T& x) {
-    __uninitialized_fill_n(first, last, x, value_type(first));
+    __uninitialized_fill(first, last, x, value_type(first));
 }
 
 } /* end of namespace stl::memory */
