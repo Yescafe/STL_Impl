@@ -20,7 +20,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++17`.
   - [x] tests/deque.cpp
 - [x] stack.hpp
   - [x] tests/stack.cpp
-- [ ] queue.hpp
-  - [ ] tests/queue.cpp
+- [x] queue.hpp
+  - [x] tests/queue.cpp
 - [ ] Experiment libs (maybe need C++20, so need to modify the `Makefile`)
   - [ ] experiment/concept/concept.hpp (C++20)
