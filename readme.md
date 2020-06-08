@@ -22,6 +22,8 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++17`.
   - [x] tests/stack.cpp
 - [x] queue.hpp
   - [x] tests/queue.cpp
+- [x] pqueue.hpp (priority_queue)
+  - [x] tests/priority_queue.cpp
 - Algorithm.hpp
   - [x] heap: `push_heap()`, `pop_heap()`, `sort_heap()`, `make_heap()`
 - [ ] Experiment libs (maybe need C++20, so need to modify the `Makefile`)
