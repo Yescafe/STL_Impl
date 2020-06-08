@@ -68,7 +68,25 @@ int main()
 
     ideq.clear();
     std::cout << "Clear:" << std::endl;
-    print_deque_info(ideq); 
+    print_deque_info(ideq);
+
+    {
+        std::cout << "Default ctor test:" << std::endl;
+        stl::deque<int, stl::alloc, 32> ideq(0, 9);
+        print_deque_info(ideq);
+
+    #if 0   // disabled
+        std::cout << "Test front() and back() of an empty deque:" << std::endl;
+        std::cout << "  ideq.front() = " << ideq.front() << std::endl;
+        std::cout << "  ideq.back() = " << ideq.back() << std::endl << std::endl;
+    #endif 
+
+        std::cout << "Push 10 elements at front:" << std::endl;
+        for (int i = 0; i < 10; ++i) {
+            ideq.push_front(i + 1);
+        }
+        print_deque_info(ideq);
+    }
 
     return 0;
 }

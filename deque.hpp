@@ -143,7 +143,7 @@ public:
     reference back() {
         iterator tmp = finish;
         --tmp;
-        return tmp;
+        return *tmp;
     }
 
     size_type size() const { return finish - start; }
@@ -171,6 +171,7 @@ protected:
     }
 
 public:
+    deque() : deque(0, {}) {}
     deque(int n, const value_type& value)
      : start(), finish(), map(0), map_size(0)
     {
