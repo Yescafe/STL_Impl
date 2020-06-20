@@ -7,10 +7,6 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
 
 
 ## 组件和附属组件完成状态 Components' Status
-- [x] memory.hpp
-  - [x] memory/alloc.hpp
-  - [x] memory/construct.hpp
-  - [x] memory/utils.hpp
 - [x] iterator.hpp
 - [x] vector.hpp
   - [x] tests/vector.cpp
@@ -26,5 +22,12 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] tests/priority_queue.cpp
 - Algorithm.hpp
   - [x] heap: `push_heap()`, `pop_heap()`, `sort_heap()`, `make_heap()`
+- Implicit layers
+  - [x] __memory.hpp
+    - [x] memory/alloc.hpp
+    - [x] memory/construct.hpp
+    - [x] memory/utils.hpp
+  - [x] __type_traits.hpp
+  - [ ] __rb_tree.hpp
 - [ ] Experiment libs (maybe need C++20, so need to modify the `Makefile`)
   - [ ] experiment/concept/concept.hpp (C++20)
