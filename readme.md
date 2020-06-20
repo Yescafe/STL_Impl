@@ -20,8 +20,10 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] tests/queue.cpp
 - [x] pqueue.hpp (priority_queue)
   - [x] tests/priority_queue.cpp
-- Algorithm.hpp
+- algorithm.hpp
   - [x] heap: `push_heap()`, `pop_heap()`, `sort_heap()`, `make_heap()`
+- utility.hpp
+  - [x] pair
 - Implicit layers
   - [x] __memory.hpp
     - [x] memory/alloc.hpp
@@ -29,5 +31,6 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
     - [x] memory/utils.hpp
   - [x] __type_traits.hpp
   - [ ] __rb_tree.hpp
+    - [ ] tests/rb_tree.cpp
 - [ ] Experiment libs (maybe need C++20, so need to modify the `Makefile`)
   - [ ] experiment/concept/concept.hpp (C++20)
