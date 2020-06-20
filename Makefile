@@ -1,5 +1,5 @@
 cpp          := c++
-cppflags     := -std=c++17 -Wall -g
+cppflags     := -std=c++11 -W{all,extra} -g
 
 out_dir      := ./bin
 target_name  := $(shell ls ./tests)

@@ -82,11 +82,11 @@ int main()
     std::cout << "ilist.merge(ilist2);" << std::endl;
     print_list_info(ilist);
 
-    ilist.sort(std::greater{});
+    ilist.sort(std::greater<int>{});
     std::cout << "ilist.sort(<functor>);" << std::endl;
     print_list_info(ilist);
 
-    ilist.sort([](const auto& a, const auto& b) {
+    ilist.sort([](const int& a, const int& b) {
             if (a % 2 == 0 && b % 2 != 0)
                 return true;
             return false;
