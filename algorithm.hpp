@@ -3,6 +3,7 @@
 
 #include "iterator.hpp"
 #include "__type_traits.hpp"
+#include "algobase.hpp"
 
 namespace stl
 {
