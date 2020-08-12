@@ -10,7 +10,7 @@
 #endif
 
 #include "./utils.hpp"
-#include <malloc.h>
+#include <cstdlib>
 
 namespace stl::memory {
 
