@@ -24,6 +24,13 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] heap: `push_heap()`, `pop_heap()`, `sort_heap()`, `make_heap()`
 - utility.hpp
   - [x] pair
+- [x] numeric.hpp
+  - [x] accumulate 
+  - [x] adjacent_difference
+  - [x] inner_product
+  - [x] partial_sum
+  - [x] power
+  - [x] iota
 - Implicit layers
   - [x] __memory.hpp
     - [x] memory/alloc.hpp
