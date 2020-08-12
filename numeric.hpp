@@ -119,7 +119,7 @@ OutputIterator __partial_sum(InputIterator first, InputIterator last,
 template<typename InputIterator, typename OutputIterator,
          typename BinaryOperation>
 OutputIterator partial_sum(InputIterator first, InputIterator last, OutputIterator result,
-                       BinaryOperation binary_op) {
+                           BinaryOperation binary_op) {
     if (first == last) return result;
     *result = *first;
     return __partial_sum(first, last, result, stl::value_type(first), binary_op);
