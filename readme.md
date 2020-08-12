@@ -6,7 +6,7 @@ Reference to *The Annotated STL Sources(using SGI STL)*.
 Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.  
 
 
-## 组件和附属组件完成状态 Components' Status
+## 组件与其附属组件完成状态 Components and Their Sub-components' Status
 - [x] iterator.hpp
 - [x] vector.hpp
   - [x] tests/vector.cpp
@@ -21,16 +21,27 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
 - [x] pqueue.hpp (priority_queue)
   - [x] tests/priority_queue.cpp
 - algorithm.hpp
-  - [x] heap: `push_heap()`, `pop_heap()`, `sort_heap()`, `make_heap()`
+  - algobase.hpp
+  - [x] about heap: `push_heap()`, `pop_heap()`, `sort_heap()`, `make_heap()`
+- algobase.hpp
+  - [x] `equal()`
+  - [x] `fill()`, `fill_n()`
+  - [x] `iter_swap()`
+  - [x] `lexicographical_compare`
+  - [x] `min`, `max`, `min_max`
+  - [x] `mismatch()`
+  - [x] `swap()`
+  - [ ] `copy()`
+  - [ ] `copy_backward()`
 - utility.hpp
   - [x] pair
-- [x] numeric.hpp
-  - [x] accumulate 
-  - [x] adjacent_difference
-  - [x] inner_product
-  - [x] partial_sum
-  - [x] power
-  - [x] iota
+- numeric.hpp
+  - [x] `accumulate()`
+  - [x] `adjacent_difference()`
+  - [x] `inner_product()`
+  - [x] `partial_sum()`
+  - [x] `power()`
+  - [x] `iota()`
 - Implicit layers
   - [x] __memory.hpp
     - [x] memory/alloc.hpp
