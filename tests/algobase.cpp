@@ -8,6 +8,8 @@
 #include <cassert>
 #include "../numeric.hpp"
 #include <string>
+#include "../list.hpp"
+#include "../deque.hpp"
 
 int main()
 {
@@ -89,4 +91,58 @@ int main()
     std::cout << "Before swaping, a = " << a << ", b = " << b << std::endl;
     stl::swap(a, b);
     std::cout << "After swaping, a = " << a << ", b = " << b << std::endl;
+
+    // Copy
+    auto print = [](auto& c) {
+        for (const auto& i : c)
+            std::cout << i << ", ";
+        std::endl(std::cout);
+    };
+
+    class C {
+    public:
+        C() : _data(3) { }   // trivial assignment operator
+        C(const C&) = default;
+        int get() const { return _data; }
+    private:
+        int _data;
+    };
+    const char ccs[5] = {'a', 'b', 'c', 'd', 'e'};
+    char ccd[5];
+    stl::copy(ccs, ccs + 5, ccd);
+    std::cout << "Copy 1: ";
+    print(ccd);
+
+    const wchar_t cwcs[5] = {'a', 'b', 'c', 'd', 'e'};
+    wchar_t cwcd[5];
+    stl::copy(cwcs, cwcs + 5, cwcd);
+    std::cout << "Copy 2: ";
+    print(cwcd);
+
+    int ia[5] = {0, 1, 2, 3, 4};
+    stl::copy(ia, ia + 5, ia);
+    std::cout << "Copy 3: ";
+    print(ia);
+
+    stl::vector<int> ivecs(ia, ia + 5);
+    stl::vector<int> ivecd(5);
+    stl::copy(ivecs.begin(), ivecs.end(), ivecd.begin());
+    std::cout << "Copy 4: ";
+    print(ivecd);
+
+    stl::list<int> ilists(ia, ia + 5);
+    stl::list<int> ilistd(5);
+    stl::copy(ilists.begin(), ilists.end(), ilistd.begin());
+    std::cout << "Copy 5: ";
+    print(ilistd);
+
+    C c[5];
+    stl::deque<C> Cds(c, c + 5);
+    stl::deque<C> Cdd(5);
+    stl::copy(Cds.begin(), Cds.end(), Cdd.begin());
+    std::cout << "Copy 6: ";
+    for (auto itr = Cdd.begin(); itr != Cdd.end(); ++itr) {
+        std::cout << itr->get() << ", ";
+    }
+    std::endl(std::cout);
 }

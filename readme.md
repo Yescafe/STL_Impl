@@ -31,7 +31,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `min`, `max`, `min_max`
   - [x] `mismatch()`
   - [x] `swap()`
-  - [ ] `copy()`
+  - [x] `copy()`
   - [ ] `copy_backward()`
 - utility.hpp
   - [x] pair
