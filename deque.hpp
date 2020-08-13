@@ -171,12 +171,20 @@ protected:
     }
 
 public:
-    deque() : deque(0, {}) {}
+    deque() : deque(0, T()) {}
     deque(int n, const value_type& value)
      : start(), finish(), map(0), map_size(0)
     {
         fill_initialize(n, value);
     }
+    template<typename InputIterator>
+    deque(InputIterator first, InputIterator last) : deque() {
+        for ( ; first != last; ++first) {
+            push_back(*first);
+        }
+    }
+    explicit deque(size_type n)
+     : deque(n, T()) { }
 
 public:
     void push_back(const value_type& t) {
@@ -309,7 +317,7 @@ void deque<T, Alloc, BufSiz>::create_map_and_nodes(size_type num_elements)
 template<typename T, typename Alloc, std::size_t BufSiz>
 void deque<T, Alloc, BufSiz>::push_back_aux(const value_type& t)
 {
-    value_type t_copy;
+    value_type t_copy {t};
     reserve_map_at_back();
     *(finish.node + 1) = allocate_node();
     try {
