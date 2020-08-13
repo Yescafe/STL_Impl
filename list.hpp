@@ -117,6 +117,17 @@ public:
     reference back()  { return *(--end()); }
 
     list() { empty_initialize(); }
+    template<typename InputIterator>
+    list(InputIterator first, InputIterator last) : list() {
+        for (; first != last; ++first) {
+            push_back(*first);
+        }
+    }
+    explicit list(size_type n) : list() {
+        for ( ; n > 0; --n) {
+            push_back(T());
+        }
+    }
 
 protected:
     void empty_initialize() {
