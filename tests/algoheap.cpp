@@ -13,7 +13,11 @@ void print_sequence(Iterator first, Iterator last)
     std::cout << "}" << std::endl;
 }
 
+#ifndef _TESTS_ALGORITHM
 int main()
+#else
+void tests_algoheap()
+#endif
 {
     int ia[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     stl::vector<int> ivec;

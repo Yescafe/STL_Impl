@@ -11,7 +11,11 @@
 #include "../list.hpp"
 #include "../deque.hpp"
 
+#ifndef _TESTS_ALGORITHM
 int main()
+#else
+void tests_algobase()
+#endif
 {
     std::vector<int> std_vec;
     stl::vector<int> stl_vec;
