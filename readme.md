@@ -21,8 +21,13 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
 - [x] pqueue.hpp (priority_queue)
   - [x] tests/priority_queue.cpp
 - algorithm.hpp
+  - algoheap.hpp
   - algobase.hpp
-  - [x] about heap: `push_heap()`, `pop_heap()`, `sort_heap()`, `make_heap()`
+- algoheap.hpp
+  - [x] `push_heap()`
+  - [x] `pop_heap()`
+  - [x] `sort_heap()`
+  - [x] `make_heap()`
 - algobase.hpp
   - [x] `equal()`
   - [x] `fill()`, `fill_n()`
