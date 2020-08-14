@@ -23,6 +23,13 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
 - algorithm.hpp
   - algoheap.hpp
   - algobase.hpp
+  - [x] `adjacent_find()`
+  - [x] `count()`, `count_if()`
+  - [ ] `find()`, `find_if()`, `find_end()`, `find_first_of()`
+  - [x] `for_each()`
+  - [x] `generate()`
+  - [x] `includes()`
+  - [x] `max_element()`, `min_element()`, `minmax_element()`
 - algoheap.hpp
   - [x] `push_heap()`
   - [x] `pop_heap()`
