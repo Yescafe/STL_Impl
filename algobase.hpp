@@ -6,6 +6,7 @@
 #include <utility>
 #include <cstring>
 #include "__type_traits.hpp"
+#include "utility.hpp"
 
 namespace stl {
 
@@ -103,9 +104,9 @@ inline const T& max(const T& a, const T& b, Compare comp) {
 }
 
 template<typename T>
-inline std::pair<T, T>
+inline stl::pair<T, T>
 min_max(const T& a, const T& b) {
-    return std::make_pair(min(a, b), max(a, b));
+    return { min(a, b), max(a, b) };
 }
 
 // Mismatch
