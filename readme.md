@@ -54,6 +54,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `partial_sum()`
   - [x] `power()`
   - [x] `iota()`
+  - [x] `gcd()`, `lcm()`
 - Implicit layers
   - [x] __memory.hpp
     - [x] memory/alloc.hpp

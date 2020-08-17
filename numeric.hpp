@@ -155,6 +155,22 @@ void iota(ForwardIterator first, ForwardIterator last, T value) {
         *first++ = value++;
 }
 
+// GCD and LCM
+template<typename T>
+T gcd(T m, T n) {
+    while (n != 0) {
+        T t = m % n;
+        m = n;
+        n = t;
+    }
+    return m;
+}
+
+template<typename T>
+T lcm(T m, T n) {
+    return m / gcd(m, n) * n;
+}
+
 }  // end of namespace stl
 
 #endif /* STL_IMPL_NUMERIC_ */

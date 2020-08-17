@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <iterator>
 #include "../vector.hpp"
+#include <random>
+#include <cassert>
 
 int main()
 {
@@ -91,5 +93,35 @@ int main()
     std::cout << stl::power(2, 0) << std::endl;
 
     std::cout << "power(10, 7);" << std::endl;
-    std::cout << stl::power(10, 7) << std::endl;
+    std::cout << stl::power(10, 7) << std::endl << std::endl;
+
+    // GCD and LCM
+    long r;
+    std::cout << "gcd(1541, 753);" << std::endl;
+    std::cout << (r = stl::gcd(1541L, 753L)) << " "
+              << std::boolalpha << (r == std::gcd(1541L, 753L)) << std::endl;
+    std::cout << "gcd(1000000, 100000)" << std::endl;
+    std::cout << (r = stl::gcd(1000000L, 100000L)) << " "
+              << std::boolalpha << (r == std::gcd(1000000L, 100000L)) << std::endl;
+
+    std::cout << "lcm(1541, 753);" << std::endl;
+    std::cout << (r = stl::lcm(1541L, 753L)) << " "
+              << std::boolalpha << (r == std::lcm(1541L, 753L)) << std::endl;
+    std::cout << "lcm(1000000, 100000)" << std::endl;
+    std::cout << (r = stl::lcm(1000000L, 100000L)) << " "
+              << std::boolalpha << (r == std::lcm(1000000L, 100000L)) << std::endl;
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dt(1, 10000000);
+        const int TIMES = 10;
+        for (int step = 0; step < TIMES; ++step) {
+            auto m = dt(gen);
+            auto n = dt(gen);
+            assert(stl::gcd(m, n) == std::gcd(m, n));
+            assert(stl::lcm(m, n) == std::lcm(m, n));
+            std::cout << "gcd(" << m << ", " << n << ") succeed." << std::endl;
+        }
+    }
+    std::endl(std::cout);
 }
