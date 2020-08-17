@@ -30,6 +30,13 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `generate()`
   - [x] `includes()`
   - [x] `max_element()`, `min_element()`, `minmax_element()`
+  - [x] `merge()`
+  - [x] `partition()`
+  - [x] `remove(), remove_if()`, `remove_copy()`, `remove_copy_if()`
+  - [x] `replace(), replace_if()`, `replace_copy()`, `replace_copy_if()`
+  - [x] `reverse()`, `reverse_copy()`
+  - [x] `rotate()`, `rotate_copy()`
+  - [ ] `search()`, `search_n()`
 - algoheap.hpp
   - [x] `push_heap()`
   - [x] `pop_heap()`

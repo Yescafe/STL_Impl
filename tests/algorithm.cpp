@@ -160,4 +160,96 @@ int main()
     std::cout << "The min element of ivec: " << *minIter << std::endl;
     std::cout << "The max element of ivec: " << *maxIter << std::endl << std::endl;
     
+    // Merge
+    {
+        stl::vector<int> ivec1, ivec2;
+        ivec1.push_back(1);
+        ivec1.push_back(2);
+        ivec2.push_back(3);
+        ivec1.push_back(4);
+        ivec2.push_back(5);
+        ivec2.push_back(6);
+        std::cout << "ivec1: ";
+        ::print(ivec1);
+        std::cout << std::endl << "ivec2: ";
+        ::print(ivec2);
+        std::cout << std::endl << "merge: ";
+        stl::vector<int> merged(ivec1.size() + ivec2.size());
+        ::print(merged);
+        stl::copy(merged.begin(), merged.end(), std::ostream_iterator<int>(std::cout, ", "));
+        std::cout << std::endl << std::endl;
+    }
+
+    // Partition
+    std::cout << "ivec: ";
+    ::print(ivec);
+    std::cout << "partition(ivec, <lambda>);" << std::endl;
+    stl::partition(ivec.begin(), ivec.end(), [](int a) -> bool { return a & 1; });
+    std::cout << "ivec: ";
+    ::print(ivec);
+
+    // Remove
+    std::cout << "remove(ivec, 4);" << std::endl;
+    ivec.erase(stl::remove(ivec.begin(), ivec.end(), 4), ivec.end());
+    std::cout << "ivec: ";
+    ::print(ivec);
+
+    // Replace
+    std::cout << "replace(ivec, <lambda>);" << std::endl;
+    stl::replace_if(ivec.begin(), ivec.end(), [](int a) { return a & 1; }, -1);
+    std::cout << "ivec: ";
+    ::print(ivec);
+
+    // Reverse
+    std::cout << "reverse(ivec);" << std::endl;
+    stl::reverse(ivec.begin(), ivec.end());
+    std::cout << "ivec: ";
+    ::print(ivec);
+    std::endl(std::cout);
+
+    // Rotate
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 8; ++i) {
+            ivec.push_back(i + 1);
+        }
+        std::cout << "Before rotate:\nivec: ";
+        ::print(ivec);
+        auto first = ivec.begin();
+        auto middle = ivec.begin() + 3;
+        auto last = ivec.end();
+        stl::rotate(first, middle, last);
+        std::cout << "After rotate 3:\nivec: ";
+        ::print(ivec);
+    }
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 8; ++i) {
+            ivec.push_back(i + 1);
+        }
+        std::cout << "Before rotate:\nivec: ";
+        ::print(ivec);
+        auto first = ivec.begin();
+        auto middle = ivec.begin() + 4;
+        auto last = ivec.end();
+        stl::rotate(first, middle, last);
+        std::cout << "After rotate 4:\nivec: ";
+        ::print(ivec);
+    }
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 8; ++i) {
+            ivec.push_back(i + 1);
+        }
+        std::cout << "Before rotate:\nivec: ";
+        ::print(ivec);
+        auto first = ivec.begin();
+        auto middle = ivec.begin() + 6;
+        auto last = ivec.end();
+        stl::rotate(first, middle, last);
+        std::cout << "After rotate 6:\nivec: ";
+        ::print(ivec);
+    }
+
+    // Search
 }
