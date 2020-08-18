@@ -25,7 +25,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - algobase.hpp
   - [x] `adjacent_find()`
   - [x] `count()`, `count_if()`
-  - [ ] `find()`, `find_if()`, `find_end()`, `find_first_of()`
+  - [x] `find()`, `find_if()`, `find_end()`, `find_first_of()`
   - [x] `for_each()`
   - [x] `generate()`
   - [x] `includes()`
@@ -36,7 +36,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `replace(), replace_if()`, `replace_copy()`, `replace_copy_if()`
   - [x] `reverse()`, `reverse_copy()`
   - [x] `rotate()`, `rotate_copy()`
-  - [ ] `search()`, `search_n()`
+  - [x] `search()`, `search_n()`
 - algoheap.hpp
   - [x] `push_heap()`
   - [x] `pop_heap()`

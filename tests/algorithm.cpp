@@ -249,7 +249,40 @@ int main()
         stl::rotate(first, middle, last);
         std::cout << "After rotate 6:\nivec: ";
         ::print(ivec);
+        std::endl(std::cout);
     }
 
     // Search
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 6; ++i) {
+            ivec.push_back(i + 1);
+        }
+        stl::vector<int> svec;
+        for (int i = 0; i < 3; ++i) {
+            svec.push_back(i + 3);
+        }
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "svec: ";
+        ::print(svec);
+        std::cout << "search(ivec, svec);" << std::endl;
+        auto fnd = ivec.begin();
+        if ((fnd = stl::search(ivec.begin(), ivec.end(), svec.begin(), svec.end())) != ivec.end())
+            std::cout << *fnd << std::endl;
+        else
+            std::cout << "not found" << std::endl;
+        
+        std::cout << "search_n(ivec, 3, 3);" << std::endl;
+        if ((fnd = stl::search_n(ivec.begin(), ivec.end(), 3, 3)) != ivec.end())
+            std::cout << *fnd << std::endl;
+        else
+            std::cout << "not found" << std::endl;
+
+        std::cout << "search_n(ivec, 3, 3, <lambda>);" << std::endl;
+        if ((fnd = stl::search_n(ivec.begin(), ivec.end(), 3, 3, [](int a, int b) { return a > b; })) != ivec.end())
+            std::cout << *fnd << std::endl;
+        else
+            std::cout << "not found" << std::endl;
+    }
 }

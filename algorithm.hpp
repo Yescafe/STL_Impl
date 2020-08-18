@@ -90,10 +90,46 @@ ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
     return first1;
 }
 
+template<typename ForwardIterator1, typename ForwardIterator2,
+         typename Distance1, typename Distance2, typename BinaryOperation>
+ForwardIterator1 __search(ForwardIterator1 first1, ForwardIterator1 last1,
+                        ForwardIterator2 first2, ForwardIterator2 last2,
+                        Distance1*, Distance2*, BinaryOperation binary_op) {
+    Distance1 d1 = distance(first1, last1);
+    Distance2 d2 = distance(first2, last2);
+
+    if (d1 < d2) return last1;
+    
+    ForwardIterator1 current1 = first1;
+    ForwardIterator2 current2 = first2;
+
+    while (current2 != last2) {
+        if (binary_op(*current1, *current2)) {
+            ++current1, ++current2;
+        } else {
+            if (d1 == d2)
+                return last1;
+            else {
+                current1 = ++first1;
+                current2 = first2;
+                --d1;
+            }
+        }
+    }
+    return first1;
+}
+
 template<typename ForwardIterator1, typename ForwardIterator2>
 ForwardIterator1 search(ForwardIterator1 first1, ForwardIterator1 last1,
                         ForwardIterator2 first2, ForwardIterator2 last2) {
     return __search(first1, last1, first2, last2, distance_type(first1), distance_type(first2));
+}
+
+template<typename ForwardIterator1, typename ForwardIterator2, typename BinaryOperation>
+ForwardIterator1 search(ForwardIterator1 first1, ForwardIterator1 last1,
+                        ForwardIterator2 first2, ForwardIterator2 last2,
+                        BinaryOperation binary_op) {
+    return __search(first1, last1, first2, last2, distance_type(first1), distance_type(first2), binary_op);
 }
 
 // Find
@@ -110,6 +146,65 @@ InputIterator find_if(InputIterator first, InputIterator last, Predicate pred) {
         ++first;
     return first;
 }
+
+// Search
+
+template<typename ForwardIterator, typename Integer, typename T>
+ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Integer count, const T& value) {
+    if (count <= 0)
+        return first;
+    else {
+        first = find(first, last, value);
+        while (first != last) {
+            Integer n = count - 1;
+            ForwardIterator i = first;
+            ++i;
+            while (i != last && n != 0 && *i == value) {
+                ++i;
+                --n;
+            }
+            if (n == 0)
+                return first;
+            else
+                first = find(i, last, value);
+        }
+        return last;
+    }
+}
+
+template<typename ForwardIterator, typename Integer, typename T, typename BinaryOperation>
+ForwardIterator search_n(ForwardIterator first, ForwardIterator last, Integer count,
+                         const T& value, BinaryOperation binary_op) {
+    if (count <= 0)
+        return first;
+    else {
+        while (first != last) {
+            if (binary_op(*first, value)) break;
+            ++first;
+        }
+        while (first != last) {
+            Integer n = count - 1;
+            ForwardIterator i = first;
+            ++i;
+            while (i != last && n != 0 && binary_op(*i, value)) {
+                ++i;
+                --n;
+            }
+            if (n == 0)
+                return first;
+            else {
+                while (first != last) {
+                    if (binary_op(*first, value)) break;
+                    ++first;
+                }
+                first = i;
+            }
+        }
+        return last;
+    }
+}
+
+// Find
 
 template<typename ForwardIterator1, typename ForwardIterator2>
 inline ForwardIterator1
