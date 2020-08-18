@@ -37,6 +37,9 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `reverse()`, `reverse_copy()`
   - [x] `rotate()`, `rotate_copy()`
   - [x] `search()`, `search_n()`
+  - [x] `swap_ranges()`
+  - [x] `transform()`
+  - [x] `unique()`
 - algoheap.hpp
   - [x] `push_heap()`
   - [x] `pop_heap()`

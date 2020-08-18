@@ -618,6 +618,78 @@ OutputIterator rotate_copy(ForwardIterator first, ForwardIterator middle,
     return ::stl::copy(first, middle, ::stl::copy(middle, last, result));
 }
 
+// Swap Ranges
+template<typename ForwardIterator1, typename ForwardIterator2>
+ForwardIterator1 swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1,
+                             ForwardIterator2 first2) {
+    for ( ; first1 != last1; ++first1, ++first2)
+        iter_swap(first1, first2);
+    return first2;
+}
+
+// Transform
+template<typename InputIterator, typename OutputIterator, typename UnaryOperation>
+OutputIterator transform(InputIterator first, InputIterator last,
+                         OutputIterator result, UnaryOperation op) {
+    for ( ; first != last; ++first, ++result)
+        *result = op(*first);
+    return result;
+}
+
+template<typename InputIterator1, typename InputIterator2, 
+         typename OutputIterator, typename BinaryOperation>
+OutputIterator transform(InputIterator1 first1, InputIterator1 last1,
+                         InputIterator2 first2, OutputIterator result,
+                         BinaryOperation binary_op) {
+    for ( ; first1 != last1; ++first1, ++first2, ++result)
+        *result = binary_op(*first1, *first2);
+    return result;
+}
+
+// Unique
+template<typename InputIterator, typename ForwardIterator>
+ForwardIterator __unique_copy(InputIterator first, InputIterator last,
+                              ForwardIterator result, forward_iterator_tag) {
+    *result = *first;
+    while (++first != last)
+        if (*result != *first)
+            *++result = *first;
+    return ++result;
+}
+
+template<typename InputIterator, typename OutputIterator, typename T>
+OutputIterator __unique_copy(InputIterator first, InputIterator last,
+                             OutputIterator result, T*) {
+    T value = *first;
+    *result = value;
+    while (++first != last) {
+        if (value != *first) {
+            value = *first;
+            *++result = value;
+        }
+    }
+    return ++result;
+}
+
+template<typename InputIterator, typename OutputIterator>
+inline OutputIterator __unique_copy(InputIterator first, InputIterator last,
+                                    OutputIterator result, output_iterator_tag) {
+    return __unique_copy(first, last, result, value_type(first));
+}
+
+template<typename InputIterator, typename OutputIterator>
+inline OutputIterator unique_copy(InputIterator first, InputIterator last,
+                                  OutputIterator result) {
+    if (first == last) return result;
+    return __unique_copy(first, last, result, iterator_category(result));
+}
+
+template<typename ForwardIterator>
+ForwardIterator unique(ForwardIterator first, ForwardIterator last) {
+    first = adjacent_find(first, last);
+    return unique_copy(first, last, first);
+}
+
 }  // end of namespace stl
 
 #endif /*  STL_IMPL_ALGORITHM_ */

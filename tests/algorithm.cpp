@@ -285,4 +285,59 @@ int main()
         else
             std::cout << "not found" << std::endl;
     }
+
+    // Swap Ranges
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 6; ++i) {
+            ivec.push_back(i);
+        }
+        stl::vector<int> svec;
+        for (int i = 0; i < 3; ++i) {
+            svec.push_back(i + 1);
+        }
+        std::cout << "Before swap: " << std::endl;
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "svec: ";
+        ::print(svec);
+        stl::swap_ranges(ivec.begin(), ivec.begin() + 3, svec.begin());
+        std::cout << "After swap: " << std::endl;
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "svec: ";
+        ::print(svec);
+        std::endl(std::cout);
+    }
+
+    // Transform
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 6; ++i) {
+            ivec.push_back(i);
+        }
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "transform(ivec, <lambda>);" << std::endl;
+        stl::transform(ivec.begin(), ivec.end(), ivec.begin(), [](int a) { return a + 2; });
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::endl(std::cout);
+    }
+    
+    // Unique
+    {
+        int arr[] = {1, 2, 2, 3, 3, 4, 4, 4, 5};
+        stl::vector<int> ivec(arr, arr + sizeof(arr) / sizeof(int));
+        std::cout << "arr: ";
+        std::copy(std::begin(arr), std::end(arr), std::ostream_iterator<int>(std::cout, ", "));
+        std::endl(std::cout);
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "unique(ivec);" << std::endl;
+        ivec.erase(stl::unique(ivec.begin(), ivec.end()), ivec.end());
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::endl(std::cout);
+    }
 }
