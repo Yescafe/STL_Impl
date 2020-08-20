@@ -690,6 +690,219 @@ ForwardIterator unique(ForwardIterator first, ForwardIterator last) {
     return unique_copy(first, last, first);
 }
 
+// Lower bound
+template<typename ForwardIterator, typename T, typename Distance>
+ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
+                              const T& value, Distance*, forward_iterator_tag) {
+    Distance len = distance(first, last);
+    Distance half;
+    ForwardIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first;
+        advance(middle, half);
+        if (*middle < value) {
+            first = middle;
+            ++first;
+            len = len - half - 1;
+        }
+        else
+            len = half;
+    }
+    return first;
+}
+
+template<typename RandomAccessIterator, typename T, typename Distance>
+RandomAccessIterator __lower_bound(RandomAccessIterator first, RandomAccessIterator last,
+                                   const T& value, Distance*, random_access_iterator_tag) {
+    Distance len = last - first;
+    Distance half;
+    RandomAccessIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first + half;
+        if (*middle < value) {
+            first = middle + 1;
+            len = len - half - 1;
+        }
+        else
+            len = half;
+    }
+    return first;
+}
+
+template<typename ForwardIterator, typename T, typename Compare, typename Distance>
+ForwardIterator __lower_bound(ForwardIterator first, ForwardIterator last,
+                              const T& value, Compare comp, Distance*,
+                              forward_iterator_tag) {
+    Distance len = distance(first, last);
+    Distance half;
+    ForwardIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first;
+        advance(middle, half);
+        if (comp(*middle, value)) {
+            first = middle;
+            ++first;
+            len = len - half - 1;
+        }
+        else
+            len = half;
+    }
+    return first;
+}
+
+template<typename RandomAccessIterator, typename T, typename Compare, typename Distance>
+RandomAccessIterator __lower_bound(RandomAccessIterator first, RandomAccessIterator last,
+                                   const T& value, Compare comp, Distance*,
+                                   random_access_iterator_tag) {
+    Distance len = last - first;
+    Distance half;
+    RandomAccessIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first + half;
+        if (comp(*middle, value)) {
+            first = middle + 1;
+            len = len - half - 1;
+        }
+        else
+            len = half;
+    }
+    return first;
+}
+
+template<typename ForwardIterator, typename T>
+inline ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last,
+                                   const T& value) {
+    return __lower_bound(first, last, value, distance_type(first), iterator_category(first));
+}
+
+template<typename ForwardIterator, typename T, typename Compare>
+inline ForwardIterator lower_bound(ForwardIterator first, ForwardIterator last,
+                                   Compare comp, const T& value) {
+    return __lower_bound(first, last, value, comp, 
+                         distance_type(first), iterator_category(first));
+}
+
+// Upper bound
+template<typename ForwardIterator, typename T, typename Distance>
+ForwardIterator __upper_bound(ForwardIterator first, ForwardIterator last,
+                              const T& value, Distance*, forward_iterator_tag) {
+    Distance len = distance(first, last);
+    Distance half;
+    ForwardIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first;
+        advance(middle, half);
+        if (value < *middle)
+            len = half;
+        else  {
+            first = middle;
+            ++first;
+            len = len - half - 1;
+        }
+    }
+    return first;
+}
+
+template<typename RandomAccessIterator, typename T, typename Distance>
+RandomAccessIterator __upper_bound(RandomAccessIterator first, RandomAccessIterator last,
+                                   const T& value, Distance*, random_access_iterator_tag) {
+    Distance len = last - first;
+    Distance half;
+    RandomAccessIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first + half;
+        if (value < *middle)
+            len = half;
+        else  {
+            first = middle + 1;
+            len = len - half - 1;
+        }
+    }
+    return first;
+}
+
+template<typename ForwardIterator, typename T, typename Compare, typename Distance>
+ForwardIterator __upper_bound(ForwardIterator first, ForwardIterator last,
+                              const T& value, Compare comp, Distance*,
+                              forward_iterator_tag) {
+    Distance len = distance(first, last);
+    Distance half;
+    ForwardIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first;
+        advance(middle, half);
+        if (comp(value, *middle))
+            len = half;
+        else  {
+            first = middle;
+            ++first;
+            len = len - half - 1;
+        }
+    }
+    return first;
+}
+
+template<typename RandomAccessIterator, typename T, typename Compare, typename Distance>
+RandomAccessIterator __upper_bound(RandomAccessIterator first, RandomAccessIterator last,
+                                   const T& value, Compare comp, Distance*,
+                                   random_access_iterator_tag) {
+    Distance len = last - first;
+    Distance half;
+    RandomAccessIterator middle;
+
+    while (len > 0) {
+        half = len >> 1;
+        middle = first + half;
+        if (comp(value, *middle))
+            len = half;
+        else  {
+            first = middle + 1;
+            len = len - half - 1;
+        }
+    }
+    return first;
+}
+
+template<typename ForwardIterator, typename T>
+inline ForwardIterator upper_bound(ForwardIterator first, ForwardIterator last,
+                                   const T& value) {
+    return __upper_bound(first, last, value, distance(first), iterator_category(first));
+}
+
+template<typename ForwardIterator, typename T, typename Compare>
+inline ForwardIterator upper_bound(ForwardIterator first, ForwardIterator last,
+                                   const T& value, Compare comp) {
+    return __upper_bound(first, last, value, comp, distance(first), iterator_category(first));
+}
+
+// Binary search
+template<typename ForwardIterator, typename T>
+bool binary_search(ForwardIterator first, ForwardIterator last, const T& value) {
+    ForwardIterator i = lower_bound(first, last, value);
+    return i != last && !(value < *i);
+}
+
+template<typename ForwardIterator, typename T, typename Compare>
+bool binary_search(ForwardIterator first, ForwardIterator last,
+                   const T& value, Compare comp) {
+    ForwardIterator i = lower_bound(first, last, value, comp);
+    return i != last && !comp(value, *i);
+}
+
 }  // end of namespace stl
 
 #endif /*  STL_IMPL_ALGORITHM_ */

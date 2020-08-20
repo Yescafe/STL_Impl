@@ -40,6 +40,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `swap_ranges()`
   - [x] `transform()`
   - [x] `unique()`
+  - [x] `lower_bound`, `upper_bound`, `binary_search`
 - algoheap.hpp
   - [x] `push_heap()`
   - [x] `pop_heap()`

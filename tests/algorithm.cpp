@@ -340,4 +340,45 @@ int main()
         ::print(ivec);
         std::endl(std::cout);
     }
+
+    // Lower bound
+    // Upper bound
+    // Binary search
+    {
+        int arr[] = {1, 1, 2, 4, 5, 6, 6, 7, 7};
+        stl::vector<int> ivec(arr, arr + sizeof(arr) / sizeof(int));
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "binary_search(ivec, 6);" << std::endl;
+        if (stl::binary_search(ivec.begin(), ivec.end(), 6)) {
+            std::cout << "found";
+        } else {
+            std::cout << "not found";
+        }
+        std::endl(std::cout);
+        
+        std::cout << "binary_search(ivec, 10);" << std::endl;
+        if (stl::binary_search(ivec.begin(), ivec.end(), 10)) {
+            std::cout << "found";
+        } else {
+            std::cout << "not found";
+        }
+        std::endl(std::cout);
+
+        std::cout << "binary_search(ivec, 3);" << std::endl;
+        if (stl::binary_search(ivec.begin(), ivec.end(), 3)) {
+            std::cout << "found";
+        } else {
+            std::cout << "not found";
+        }
+        std::endl(std::cout);
+
+        std::cout << "binary_search(ivec, -1);" << std::endl;
+        if (stl::binary_search(ivec.begin(), ivec.end(), -1)) {
+            std::cout << "found";
+        } else {
+            std::cout << "not found";
+        }
+        std::cout << std::endl << std::endl;
+    }
 }
