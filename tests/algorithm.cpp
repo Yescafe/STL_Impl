@@ -7,6 +7,7 @@
 #include <functional>
 #include "../list.hpp"
 #include <vector>
+#include "../__debug.hpp"
 
 #include "algobase.cpp"
 #include "algoheap.cpp"
@@ -407,8 +408,8 @@ int main()
         std::endl(std::cout);
     }
 
-    // Random shuffle
     {
+        // Random shuffle
         stl::vector<int> ivec;
         for (int i = 0; i < 10; ++i) {
             ivec.push_back(i + 1);
@@ -417,6 +418,20 @@ int main()
         ::print(ivec);
         std::cout << "random_shuffle(ivec);" << std::endl;
         stl::random_shuffle(ivec.begin(), ivec.end());
+        std::cout << "ivec: ";
+        ::print(ivec);
+
+        // Partial sort
+        std::cout << "partial_sort(ivec, +4);" << std::endl;
+        stl::partial_sort(ivec.begin(), ivec.begin() + 4, ivec.end());
+        std::cout << "ivec: ";
+        ::print(ivec);
+
+        std::cout << "partial_sort(ivec, +4, <lambda>); "
+                  << stl::debug::warning("(test failed)") << std::endl;  // TODO
+        
+        stl::partial_sort(ivec.begin(), ivec.begin() + 4, ivec.end(),
+                          std::greater<int>());
         std::cout << "ivec: ";
         ::print(ivec);
         std::endl(std::cout);

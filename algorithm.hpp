@@ -1038,6 +1038,37 @@ void random_shuffle(RandomAccessIterator first, RandomAccessIterator last,
         iter_swap(i, first + rand((i - first) + 1));
 }
 
+// Partial sort
+template<typename RandomAccessIterator, typename T>
+void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
+                    RandomAccessIterator last, T*) {
+    make_heap(first, middle);
+    for (RandomAccessIterator i = middle; i < last; ++i)
+        __pop_heap(first, middle, i, T(*i), distance_type(first));
+    sort_heap(first, middle);
+}
+
+template<typename RandomAccessIterator>
+inline void partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
+                         RandomAccessIterator last) {
+    __partial_sort(first, middle, last, value_type(first));
+}
+
+template<typename RandomAccessIterator, typename T, typename Compare>
+void __partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
+                    RandomAccessIterator last, T*, Compare comp) {
+    ::stl::make_heap(first, middle, comp);
+    for (RandomAccessIterator i = middle; i < last; ++i)
+        __pop_heap(first, middle, i, T(*i), comp, distance_type(first));
+    ::stl::sort_heap(first, middle, comp);
+}
+
+template<typename RandomAccessIterator, typename Compare>
+inline void partial_sort(RandomAccessIterator first, RandomAccessIterator middle,
+                         RandomAccessIterator last, Compare comp) {
+    __partial_sort(first, middle, last, value_type(first), comp);
+}
+
 }  // end of namespace stl
 
 #endif /*  STL_IMPL_ALGORITHM_ */

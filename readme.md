@@ -43,6 +43,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `lower_bound()`, `upper_bound()`, `binary_search()`
   - [x] `next_permutation()`, `prev_permutation()`
   - [x] `random_shuffle()`
+  - [ ] `partial_sort()`
 - algoheap.hpp
   - [x] `push_heap()`
   - [x] `pop_heap()`
