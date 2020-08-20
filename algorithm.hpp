@@ -1016,6 +1016,28 @@ bool prev_permutation(BidirectionalIterator first, BidirectionalIterator last,
     }
 }
 
+// Random shuffle
+template<typename RandomAccessIterator, typename Distance>
+void __random_shuffle(RandomAccessIterator first, RandomAccessIterator last,
+                      Distance*) {
+    if (first == last) return ;
+    for (RandomAccessIterator i = first + 1; i != last; ++i)
+        iter_swap(i, first + Distance(::stl::rand() % ((i - first) + 1)));
+}
+
+template<typename RandomAccessIterator>
+inline void random_shuffle(RandomAccessIterator first, RandomAccessIterator last) {
+    __random_shuffle(first, last, distance_type(first));
+}
+
+template<typename RandomAccessIterator, typename RandomNumberGenerator>
+void random_shuffle(RandomAccessIterator first, RandomAccessIterator last,
+                    RandomNumberGenerator& rand) {
+    if (first == last) return ;
+    for (RandomAccessIterator i = first + 1; i != last; ++i)
+        iter_swap(i, first + rand((i - first) + 1));
+}
+
 }  // end of namespace stl
 
 #endif /*  STL_IMPL_ALGORITHM_ */

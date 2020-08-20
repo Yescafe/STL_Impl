@@ -406,4 +406,19 @@ int main()
         }
         std::endl(std::cout);
     }
+
+    // Random shuffle
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 10; ++i) {
+            ivec.push_back(i + 1);
+        }
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "random_shuffle(ivec);" << std::endl;
+        stl::random_shuffle(ivec.begin(), ivec.end());
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::endl(std::cout);
+    }
 }
