@@ -58,7 +58,7 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `mismatch()`
   - [x] `swap()`
   - [x] `copy()`
-  - [ ] `copy_backward()`
+  - [x] `copy_backward()`
 - utility.hpp
   - [x] `pair`
   - [x] `rand()`

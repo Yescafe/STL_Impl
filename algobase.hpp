@@ -216,7 +216,22 @@ inline wchar_t* copy(const wchar_t* first, const wchar_t* last,
     return result + (last - first);
 }
 
+// Copy backward
+template<typename BidirectionalIterator1, typename BidirectionalIterator2>
+BidirectionalIterator2 
+__copy_backward(BidirectionalIterator1 first, BidirectionalIterator1 last,
+                BidirectionalIterator2 result,
+                bidirectional_iterator_tag, bidirectional_iterator_tag) {
+    while (first != last)
+        *(--result) = *(--last);
+    return result;
+}
 
+template<typename InputIterator, typename OutputIterator>
+inline OutputIterator copy_backward(InputIterator first, InputIterator last,
+                                    OutputIterator result) {
+    return __copy_backward(first, last, result, iterator_category(first), iterator_category(result));
+}
 
 }  // end of namespace stl
 

@@ -148,5 +148,19 @@ void tests_algobase()
     for (auto itr = Cdd.begin(); itr != Cdd.end(); ++itr) {
         std::cout << itr->get() << ", ";
     }
+    std::cout << std::endl << std::endl;
+
+    // Copy backward
+    stl::vector<int> ivec;
+    for (int i = 0; i < 7; ++i) {
+        ivec.push_back(i + 1);
+    }
+    std::cout << "ivec: ";
+    stl::copy(ivec.begin(), ivec.end(), std::ostream_iterator<int>(std::cout, ", "));
+    std::endl(std::cout);
+    std::cout << "copy_backward(ivec.begin(), ivec.end() - 1, ivec.end());" << std::endl;
+    stl::copy_backward(ivec.begin(), ivec.end() - 1, ivec.end());
+    std::cout << "ivec: ";
+    stl::copy(ivec.begin(), ivec.end(), std::ostream_iterator<int>(std::cout, ", "));
     std::endl(std::cout);
 }
