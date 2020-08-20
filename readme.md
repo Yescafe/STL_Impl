@@ -58,7 +58,8 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `copy()`
   - [ ] `copy_backward()`
 - utility.hpp
-  - [x] pair
+  - [x] `pair`
+  - [x] `rand()`
 - numeric.hpp
   - [x] `accumulate()`
   - [x] `adjacent_difference()`

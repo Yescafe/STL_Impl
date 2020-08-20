@@ -1,6 +1,9 @@
 #ifndef STL_IMPL_UTILITY_
 #define STL_IMPL_UTILITY_
 
+#include <cstdlib>
+#include <ctime>
+
 namespace stl
 {
 
@@ -37,6 +40,17 @@ struct pair {
         return *this;
     }
 };
+
+auto rand() -> decltype(std::rand()) {
+    static auto initialized = false;
+    if (!initialized) {
+        std::srand(std::time(0));
+    } else {
+        std::srand(std::rand());
+    }
+    initialized = true;
+    return std::rand();
+}
 
 }  // end of namespace stl
 
