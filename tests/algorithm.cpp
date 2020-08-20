@@ -381,4 +381,29 @@ int main()
         }
         std::cout << std::endl << std::endl;
     }
+
+    // Permutation
+    {
+        int arr[] = {1, 2, 3};
+        const std::size_t size = sizeof(arr) / sizeof(arr[0]);
+        std::cout << "Next permutation sequence:" << std::endl;
+        stl::copy(arr, arr + size, std::ostream_iterator<int>(std::cout, ", "));
+        std::endl(std::cout);
+        while (stl::next_permutation(arr, arr + size)) {
+            stl::copy(arr, arr + size, std::ostream_iterator<int>(std::cout, ", "));
+            std::endl(std::cout);
+        }
+    }
+    {
+        int arr[] = {3, 2, 1};
+        const std::size_t size = sizeof(arr) / sizeof(arr[0]);
+        std::cout << "Previous permutation sequence:" << std::endl;
+        stl::copy(arr, arr + size, std::ostream_iterator<int>(std::cout, ", "));
+        std::endl(std::cout);
+        while (stl::prev_permutation(arr, arr + size)) {
+            stl::copy(arr, arr + size, std::ostream_iterator<int>(std::cout, ", "));
+            std::endl(std::cout);
+        }
+        std::endl(std::cout);
+    }
 }

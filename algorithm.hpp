@@ -903,6 +903,119 @@ bool binary_search(ForwardIterator first, ForwardIterator last,
     return i != last && !comp(value, *i);
 }
 
+// Permutation
+template<typename BidirectionalIterator>
+bool next_permutation(BidirectionalIterator first, BidirectionalIterator last) {
+    if (first == last) return false;
+    BidirectionalIterator i = first;
+    ++i;
+    if (i == last) return false;
+    i = last;
+    --i;
+
+    for (;;) {
+        BidirectionalIterator ii = i;
+        --i;  // first, .., i, ii, last
+        
+        if (*i < *ii) {
+            BidirectionalIterator j = last;
+            while (!(*i < *--j))
+                continue;
+            iter_swap(i, j);
+            reverse(ii, last);
+            return true;
+        }
+        if (i == first) {
+            reverse(first, last);
+            return false;
+        }
+    }
+}
+
+template<typename BidirectionalIterator, typename Compare>
+bool next_permutation(BidirectionalIterator first, BidirectionalIterator last,
+                      Compare comp) {
+    if (first == last) return false;
+    BidirectionalIterator i = first;
+    ++i;
+    if (i == last) return false;
+    i = last;
+    --i;
+
+    for (;;) {
+        BidirectionalIterator ii = i;
+        --i;  // first, .., i, ii, last
+        
+        if (comp(*i, *ii)) {
+            BidirectionalIterator j = last;
+            while (!comp(*i, *--j))
+                continue;
+            iter_swap(i, j);
+            reverse(ii, last);
+            return true;
+        }
+        if (i == first) {
+            reverse(first, last);
+            return false;
+        }
+    }
+}
+
+template<typename BidirectionalIterator>
+bool prev_permutation(BidirectionalIterator first, BidirectionalIterator last) {
+    if (first == last) return false;
+    BidirectionalIterator i = first;
+    ++i;
+    if (i == last) return false;
+    i = last;
+    --i;
+
+    for (;;) {
+        BidirectionalIterator ii = i;
+        --i;
+        if (*ii < *i) {
+            BidirectionalIterator j = last;
+            while (!(*--j < *i))
+                continue;
+            iter_swap(i, j);
+            reverse(ii, last);
+            return true;
+        }
+        if (i == first) {
+            reverse(first, last);
+            return false;
+        }
+    }
+}
+
+template<typename BidirectionalIterator, typename Compare>
+bool prev_permutation(BidirectionalIterator first, BidirectionalIterator last,
+                      Compare comp) {
+    if (first == last) return false;
+    BidirectionalIterator i = first;
+    ++i;
+    if (i == last) return false;
+    i = last;
+    --i;
+
+    for (;;) {
+        BidirectionalIterator ii = i;
+        --i;
+        if (comp(*ii, *i)) {
+            BidirectionalIterator j = last;
+            while (!comp(*--j, *i))
+                continue;
+            iter_swap(i, j);
+            reverse(ii, last);
+            return true;
+        }
+        if (i == first) {
+            reverse(first, last);
+            return false;
+        }
+    }
+}
+
 }  // end of namespace stl
 
 #endif /*  STL_IMPL_ALGORITHM_ */
