@@ -135,10 +135,4 @@ struct __type_traits<T*> {
 
 } /* end of namespace stl::__traits */
 
-#if 0
-namespace stl {
-    using namespace __traits;
-} /* end of namespace stl */
-#endif
-
 #endif /* end of STL_IMPL__TYPE_TRAITS_ */
