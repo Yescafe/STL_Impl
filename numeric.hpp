@@ -2,7 +2,7 @@
 #define STL_IMPL_NUMERIC_
 
 #include "iterator.hpp"
-#include <functional>
+#include "functional.hpp"
 
 namespace stl {
 // Accumulate
@@ -126,10 +126,10 @@ OutputIterator partial_sum(InputIterator first, InputIterator last, OutputIterat
 }
 
 // Power
-template<typename T, typename Integer, typename MonoidOperation = std::multiplies<T>>
-T power(T x, Integer n, MonoidOperation op = std::multiplies<T>()) {
+template<typename T, typename Integer, typename MonoidOperation = stl::multiplies<T>>
+T power(T x, Integer n, MonoidOperation op = stl::multiplies<T>()) {
     if (n == 0)
-        return 1; // TODO 修改为 stl::identity_element(op)
+        return stl::identity_element(op);
     else {
         while ((n & 1) == 0) {
             n >>= 1;
