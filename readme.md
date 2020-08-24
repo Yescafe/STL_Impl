@@ -81,6 +81,8 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `equal_to`, `not_equal_to`, `greater`, `greater_equal`, `less`, `less_equal`
   - [x] `identity`
   - [x] `select1st`, `select2nd`
+- type_traits.hpp
+  - __type_traits.hpp
 - Implicit layers
   - [x] __memory.hpp
     - [x] memory/alloc.hpp
