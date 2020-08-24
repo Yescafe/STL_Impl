@@ -75,6 +75,12 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `power()`
   - [x] `iota()`
   - [x] `gcd()`, `lcm()`
+- functional.hpp
+  - [x] `unary_function`, `binary_function`
+  - [x] `plus`, `minus`, `multiplies`, `divides`, `modulus`, `negate`
+  - [x] `equal_to`, `not_equal_to`, `greater`, `greater_equal`, `less`, `less_equal`
+  - [x] `identity`
+  - [x] `select1st`, `select2nd`
 - Implicit layers
   - [x] __memory.hpp
     - [x] memory/alloc.hpp
