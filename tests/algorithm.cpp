@@ -8,15 +8,16 @@
 #include "../list.hpp"
 #include <vector>
 #include "../__debug.hpp"
+#include <random>
 
 #include "algobase.cpp"
 #include "algoheap.cpp"
 
 template<typename Container>
-void print(Container& c) {
+std::ostream& print(Container& c) {
     // Foreach
     stl::for_each(c.begin(), c.end(), [](int a) { std::cout << a << ", "; });
-    std::endl(std::cout);
+    return std::endl(std::cout);
 }
 
 int main()
@@ -435,5 +436,32 @@ int main()
         std::cout << "ivec: ";
         ::print(ivec);
         std::endl(std::cout);
+    }
+
+    // Sort
+    {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dt(1, 10000);
+        stl::vector<int> ivec1;
+        for (int i = 0; i < 10; ++i) {
+            ivec1.push_back(dt(gen));
+        }
+        std::cout << "ivec1: ";
+        ::print(ivec1);
+        std::cout << "sort(ivec1);" << std::endl;
+        stl::sort(ivec1.begin(), ivec1.end());
+        std::cout << "ivec1: ";
+        ::print(ivec1);
+        stl::vector<int> ivec2;
+        for (int i = 0; i < 30; ++i) {
+            ivec2.push_back(dt(gen));
+        }
+        std::cout << "ivec2: ";
+        ::print(ivec2);
+        std::cout << "sort(ivec2);" << std::endl;
+        stl::sort(ivec2.begin(), ivec2.end());
+        std::cout << "ivec2: ";
+        ::print(ivec2) << std::endl;
     }
 }
