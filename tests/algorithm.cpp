@@ -464,4 +464,27 @@ int main()
         std::cout << "ivec2: ";
         ::print(ivec2) << std::endl;
     }
+
+    // Equal range
+    // Inplace range
+
+    // Nth element
+    {
+        stl::vector<int> ivec;
+        for (int i = 0; i < 10; ++i) {
+            ivec.push_back(i + 1);
+        }
+        stl::random_shuffle(ivec.begin(), ivec.end());
+        std::cout << "ivec: ";
+        ::print(ivec);
+        std::cout << "nth_element(ivec);" << std::endl;
+        stl::nth_element(ivec.begin(), ivec.begin() + 3, ivec.end());
+        std::cout << "ivec: ";
+        ::print(ivec);
+        assert(4 == *(ivec.begin() + 3));
+        std::cout << "3rd element: " << *(ivec.begin() + 3)
+                  << std::endl << std::endl;
+    }
+
+    // Merge sort
 }

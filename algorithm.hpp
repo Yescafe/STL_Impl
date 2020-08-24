@@ -1070,6 +1070,7 @@ inline void partial_sort(RandomAccessIterator first, RandomAccessIterator middle
 }
 
 // Sort
+// TODO Enhance sort function
 template<typename RandomAccessIterator, typename T>
 void __unguarded_linear_insert(RandomAccessIterator last, T value) {
     RandomAccessIterator next = last;
@@ -1184,6 +1185,44 @@ inline void sort(RandomAccessIterator first, RandomAccessIterator last) {
         __introsort_loop(first, last, value_type(first), __lg(last - first) * 2);
         __final_insertion_sort(first, last);
     }
+}
+
+// Equal range
+// Inplace merge
+
+// Nth element
+template<typename RandomAccessIterator, typename T>
+void __nth_element(RandomAccessIterator first, RandomAccessIterator nth,
+                   RandomAccessIterator last, T*) {
+    while (last - first > 3) {
+        RandomAccessIterator cut =
+            __unguarded_partition(first, last,
+                                  T(__median(*first, *(first + (last - first) / 2),
+                                  *(last - 1))));
+        if (cut <= nth)
+            first = cut;
+        else
+            last = cut;
+    }
+    __insertion_sort(first, last);
+}
+
+template<typename RandomAccessIterator>
+inline void nth_element(RandomAccessIterator first, RandomAccessIterator nth,
+                        RandomAccessIterator last) {
+    __nth_element(first, nth, last, value_type(first));
+}
+
+// Merge sort
+template<typename BidirectionalIterator>
+void merge_sort(BidirectionalIterator first, BidirectionalIterator last) {
+    typename iterator_traits<BidirectionalIterator>::difference_type n = distance(first, last);
+    if (n == 0 || n == 1)
+        return ;
+    BidirectionalIterator mid = first + n / 2;
+    merge_sort(first, mid);
+    merge_sort(mid, last);
+    inplace_merge(first, mid, last);  // TODO
 }
 
 }  // end of namespace stl
