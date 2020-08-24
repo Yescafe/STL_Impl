@@ -2,7 +2,7 @@
 代码参考《STL 源码剖析》（侯捷 著）。  
 Reference to *The Annotated STL Sources(using SGI STL)*.   
 
-最低兼容版本为 C++11，默认为 C++17 (放弃了原来的 C++20).  
+最低兼容版本为 C++11，默认为 C++17 (放弃了原来的 C++20). (注：测试代码至少需要 C++17)  
 Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.  
 
 
