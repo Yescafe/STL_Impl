@@ -8,6 +8,11 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
 
 ## 组件与其附属组件完成状态 Components and Their Sub-components' Status
 - [x] iterator.hpp
+  - [x] `iterator`, iterator_traits
+  - [x] `distance`
+  - [x] `advance`
+  - [x] `back_inserter`, `front_inserter`, `inserter`, `reverse_inserter`
+  - [x] `istream_iterator`, `ostream_iterator`
 - [x] vector.hpp
   - [x] tests/vector.cpp
 - [x] list.hpp
@@ -81,6 +86,9 @@ Default is `-std=c++17` (C++20 is deprecated), minimum is `-std=c++11`.
   - [x] `equal_to`, `not_equal_to`, `greater`, `greater_equal`, `less`, `less_equal`
   - [x] `identity`
   - [x] `select1st`, `select2nd`
+  - [ ] `unary_negate`, `not1()`, `binary_negate`, `not2()`
+  - [x] `binder1st`, `bind1st()`, `binder2nd`, `bind2nd()`
+  - [x] `pointer_to_unary_function`, `pointer_to_binary_function`, `ptr_fun()`
 - type_traits.hpp
   - __type_traits.hpp
 - Implicit layers

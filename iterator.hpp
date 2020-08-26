@@ -279,8 +279,6 @@ public:
 
 template<typename T, typename Distance = ::std::ptrdiff_t>
 class istream_iterator {
-    friend bool
-    operator==(const istream_iterator<T, Distance>& x, const istream_iterator<T, Distance>& y);
 protected:
     ::std::istream* stream;
     T value;
